@@ -1,0 +1,88 @@
+[gd_scene load_steps=9 format=3 uid="uid://bec7c2m22x5j1"]
+
+[ext_resource type="Script" path="res://Scripts/Level.gd" id="1_ircux"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g0ahp"]
+albedo_color = Color(0.607843, 0.278431, 0.615686, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qvful"]
+albedo_color = Color(1, 0.537255, 0.623529, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yh550"]
+albedo_color = Color(0.807843, 1, 0.294118, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6jvt5"]
+albedo_color = Color(0.976471, 1, 0.482353, 1)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_4n6cv"]
+sky_top_color = Color(0.12549, 0.592157, 0.780392, 1)
+sky_horizon_color = Color(0.572549, 0.894118, 0.92549, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_vsb6m"]
+sky_material = SubResource("ProceduralSkyMaterial_4n6cv")
+
+[sub_resource type="Environment" id="Environment_spkv3"]
+background_mode = 2
+sky = SubResource("Sky_vsb6m")
+tonemap_mode = 2
+glow_enabled = true
+
+[node name="Level" type="Node3D"]
+script = ExtResource("1_ircux")
+
+[node name="CameraPivot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000738859, 1.00419, 3.99309)
+
+[node name="Camera3D" type="Camera3D" parent="CameraPivot"]
+current = true
+
+[node name="SpawnTimer" type="Timer" parent="."]
+wait_time = 2.0
+autostart = true
+
+[node name="Monsters" type="Node3D" parent="."]
+
+[node name="Scenario" type="Node3D" parent="."]
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Scenario"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.24709, 1, 1)
+size = Vector3(6, 3, 1)
+material = SubResource("StandardMaterial3D_g0ahp")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Scenario"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.75291, 1, 1)
+size = Vector3(6, 3, 1)
+material = SubResource("StandardMaterial3D_g0ahp")
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="Scenario"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.247094, 2, -5)
+size = Vector3(16, 6, 1)
+material = SubResource("StandardMaterial3D_qvful")
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="Scenario"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.61258, 3, -8.04255)
+size = Vector3(4, 8, 4)
+material = SubResource("StandardMaterial3D_qvful")
+
+[node name="Ground" type="CSGBox3D" parent="Scenario"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.494497, -1, 0)
+size = Vector3(16, 1, 12)
+material = SubResource("StandardMaterial3D_yh550")
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="Scenario"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -7.06617, -0.483355, -0.793028)
+polygon = PackedVector2Array(-2, 3, -2, 0, 9.83005, 0.802495, 14.2482, -0.0647323, 14.2893, 3.00203, 2.58016, 2.62231)
+material = SubResource("StandardMaterial3D_6jvt5")
+
+[node name="Environment" type="Node3D" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
+environment = SubResource("Environment_spkv3")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment"]
+transform = Transform3D(-0.466577, 0.613827, -0.636807, -0.11769, 0.670491, 0.732524, 0.876616, 0.416724, -0.240594, 0, 0, -0.0385323)
+shadow_enabled = true
+directional_shadow_mode = 0
+
+[connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]

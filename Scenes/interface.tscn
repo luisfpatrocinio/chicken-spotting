@@ -1,0 +1,65 @@
+[gd_scene load_steps=5 format=3 uid="uid://qq0fdpvsfjny"]
+
+[ext_resource type="Script" path="res://Scripts/Interface.gd" id="1_shi1r"]
+[ext_resource type="Texture2D" uid="uid://co6nim4d6t6x6" path="res://Assets/binoculars.png" id="2_bl13r"]
+[ext_resource type="Shader" path="res://new_shader.gdshader" id="3_auk0d"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3d0ie"]
+shader = ExtResource("3_auk0d")
+shader_parameter/resolution = Vector2(320, 180)
+shader_parameter/scan_line_amount = 1.0
+shader_parameter/warp_amount = 0.1
+shader_parameter/noise_amount = 0.03
+shader_parameter/interference_amount = 0.2
+shader_parameter/grille_amount = 0.1
+shader_parameter/grille_size = 1.0
+shader_parameter/vignette_amount = 0.6
+shader_parameter/vignette_intensity = 0.4
+shader_parameter/aberation_amount = 0.5
+shader_parameter/roll_line_amount = 0.3
+shader_parameter/roll_speed = 1.0
+shader_parameter/scan_line_strength = -8.0
+shader_parameter/pixel_strength = -2.0
+
+[node name="Interface" type="CanvasLayer"]
+script = ExtResource("1_shi1r")
+
+[node name="Binoculars" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 1, 0.662745)
+position = Vector2(400, 300)
+texture = ExtResource("2_bl13r")
+
+[node name="Players" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Players"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_top = -96.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="MessageSpace" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect2" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_3d0ie")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

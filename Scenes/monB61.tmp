@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cugjpq4ku83th"]
+
+[ext_resource type="Script" path="res://Scripts/monster_tower.gd" id="1_gdpoc"]
+
+[node name="MonsterTower" type="CharacterBody3D"]
+script = ExtResource("1_gdpoc")

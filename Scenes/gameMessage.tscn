@@ -1,0 +1,22 @@
+[gd_scene load_steps=2 format=3 uid="uid://cgjufr1p0bgwt"]
+
+[ext_resource type="Script" path="res://Scripts/gameMessage.gd" id="1_0wnh6"]
+
+[node name="Label" type="Label"]
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -11.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 6
+size_flags_vertical = 6
+horizontal_alignment = 1
+script = ExtResource("1_0wnh6")
+
+[node name="Timer" type="Timer" parent="."]
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

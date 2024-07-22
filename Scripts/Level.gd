@@ -1,0 +1,134 @@
+extends Node3D
+
+@onready var cameraNode: Node3D = get_node("CameraPivot");
+@onready var spawnTimer: Timer = get_node("SpawnTimer");
+@onready var chickenScene: PackedScene = preload("res://Scenes/Monsters/Chicken.tscn");
+@onready var penguinScene: PackedScene = preload("res://Scenes/Monsters/Penguin.tscn");
+@onready var monsterTowerScene: PackedScene = preload("res://Scenes/monster_tower.tscn");
+@onready var monstersNode: Node3D = get_node("Monsters");
+@onready var resultsMonstersNode: Node3D = get_node("ResultsMonsters");
+
+var createdChickens: int = 0;
+var playersInputs: Dictionary = {}
+var chickensToCreate: int = randi_range(25, 44);
+
+var gameStarted: bool = false;
+var gameFinished: bool = false;
+var showingResults: bool = false;
+
+var lastBehaviour: int = 0;
+
+var intervalFactor: float = 1.0;
+
+func _ready() -> void:
+	pass
+	
+func startGame():
+	print("Jogo iniciado.");
+	gameStarted = true;
+	spawnTimer.start();
+
+func _process(delta):
+	if !gameStarted:
+		if Input.is_action_just_pressed("ui_accept"):
+			startGame();
+	
+	if createdChickens >= chickensToCreate:
+		spawnTimer.stop();
+	
+	manageGameOver();
+	
+	if showingResults:
+		if resultsMonstersNode.get_child_count() <= 0:
+			var _n = 0;
+			for i in range(createdChickens):
+				var _chicken = chickenScene.instantiate();
+				resultsMonstersNode.add_child(_chicken);
+				var _w = 10;
+				var _spac = 0.850;
+				_chicken.position.x = (_n % _w) * _spac;
+				_chicken.position.z = floor(_n / _w) * _spac;
+				_chicken.set_process(false);
+				_n += 1;
+		cameraNode.global_position = cameraNode.global_position.lerp(Vector3(15.0, 4.0, 6.50), 0.050);
+		cameraNode.rotation.x = lerp(cameraNode.rotation.x, -0.50, 0.050)
+		cameraNode.rotation.y = 0.0
+		cameraNode.rotation.z = 0.0
+
+func _input(event) -> void:
+	if gameStarted and !gameFinished and event.is_action_pressed("ui_accept"):
+		playersInputs[event.device] = playersInputs.get(event.device, 0) + 1;
+		Interface.pulsePlayer(event.device);
+		Global.playSFX("count");
+
+func spawnChicken(i = 0.0) -> void:
+	var _chicken: Node = chickenScene.instantiate();
+	_chicken.position = Vector3(-5.0 - i, -0.50, -1);
+	_chicken.idFactor = i;
+	_chicken.behaviour = lastBehaviour;
+	monstersNode.add_child(_chicken);
+	createdChickens += 1;
+	
+func spawnPenguin(i = 0.0) -> void:
+	var _penguin: Node = penguinScene.instantiate();
+	_penguin.position = Vector3(-5.0 - i, -0.50, -1);
+	_penguin.idFactor = i;
+	_penguin.behaviour = lastBehaviour;
+	monstersNode.add_child(_penguin);
+
+func spawnMonsterTower() -> void:
+	print("Criando torre.");
+	var _tower: Node = monsterTowerScene.instantiate();
+	_tower.position = Vector3(-5.0, -0.50, -1);
+	
+	_tower.towerSize = randi_range(3, 7);
+	
+	var _chickenInThisTower = randi_range(2, 5);
+	_tower.chickenQnt = _chickenInThisTower;
+	
+	monstersNode.add_child(_tower);
+	createdChickens += _chickenInThisTower;
+
+func manageGameOver():
+	if gameFinished and !showingResults:
+		var _lens = Interface.get_node("Binoculars") as Sprite2D
+		_lens.modulate.a = move_toward(_lens.modulate.a, 0.0, 0.015);
+		_lens.scale = _lens.scale.move_toward(Vector2(1.10, 1.10), 0.0025);
+		
+		var _tween = get_tree().create_tween();
+		_tween.tween_property(cameraNode, "global_position", Vector3(0.0, 0.65, 6.50), 1.0)
+		await _tween.finished;
+		
+		await get_tree().create_timer(3);
+		showingResults = true;
+	elif !showingResults:
+		if createdChickens >= chickensToCreate and monstersNode.get_child_count() <= 0:
+			gameFinished = true;
+			Interface.showMessage("ACABOU!");
+			
+	if showingResults:
+		for i in range(Interface.playersNode.get_child_count()):
+			var icon = Interface.playersNode.get_child(i);
+			icon.get_node("Label").visible = true;
+			icon.get_node("Label").text = str(playersInputs.get(i));
+			
+	
+func _on_spawn_timer_timeout() -> void:
+	spawnTimer.wait_time = randf_range(1.0, 2.0) * intervalFactor;	
+	if lastBehaviour == 1 and randi() % 2 == 0:
+		spawnMonsterTower();
+	else:
+		var _qnt = 1;
+		if randi() % 3 == 0 and lastBehaviour == 0:
+			print("CRIANDO VARIOS PINTOS EM SEQUENCIA");
+			_qnt = randi_range(3, 5);
+			spawnTimer.wait_time += _qnt * 0.150;
+		
+		for i in range(_qnt):
+			if randi() % 4 == 0:
+				spawnPenguin(i);
+			else:
+				spawnChicken(i);
+					
+	lastBehaviour = wrap(lastBehaviour + 1, 0, 3);
+	#intervalFactor -= 0.01;
