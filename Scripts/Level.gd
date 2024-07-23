@@ -21,6 +21,8 @@ var lastBehaviour: int = 0;
 var intervalFactor: float = 1.0;
 
 func _ready() -> void:
+	Global.playBGM("game");
+	Interface.addPlayer(); #TODO: REMOVER DEPOIS
 	pass
 	
 func startGame():

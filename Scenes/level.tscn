@@ -1,7 +1,6 @@
-[gd_scene load_steps=11 format=3 uid="uid://bec7c2m22x5j1"]
+[gd_scene load_steps=10 format=3 uid="uid://bec7c2m22x5j1"]
 
 [ext_resource type="Script" path="res://Scripts/Level.gd" id="1_ircux"]
-[ext_resource type="AudioStream" uid="uid://b4gm1t5gn1ip1" path="res://Assets/Marching Monsters.mp3" id="2_gwwxc"]
 [ext_resource type="Script" path="res://Scripts/ResultsMonsters.gd" id="3_k74a1"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g0ahp"]
@@ -21,12 +20,12 @@ sky_top_color = Color(0.12549, 0.592157, 0.780392, 1)
 sky_horizon_color = Color(0.572549, 0.894118, 0.92549, 1)
 ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
 
-[sub_resource type="Sky" id="Sky_vsb6m"]
+[sub_resource type="Sky" id="Sky_jfdmc"]
 sky_material = SubResource("ProceduralSkyMaterial_4n6cv")
 
 [sub_resource type="Environment" id="Environment_spkv3"]
 background_mode = 2
-sky = SubResource("Sky_vsb6m")
+sky = SubResource("Sky_jfdmc")
 tonemap_mode = 2
 glow_enabled = true
 
@@ -87,11 +86,6 @@ light_energy = 0.2
 light_indirect_energy = 0.5
 shadow_enabled = true
 directional_shadow_mode = 0
-
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("2_gwwxc")
-volume_db = -2.0
-autoplay = true
 
 [node name="ResultsMonsters" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.727, -4.76837e-07, -0.732382)
