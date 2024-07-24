@@ -2,6 +2,7 @@ extends CanvasLayer
 
 @onready var playerIconScene: PackedScene = preload("res://Scenes/interfacePlayerIcon.tscn")
 @onready var playersNode: HBoxContainer = get_node("Players/HBoxContainer");
+@onready var chickenCountLabel: Label = get_node("ChickenCountLabel");
 @onready var messagesSpace: Control = get_node("MessageSpace");
 @onready var messageScene: PackedScene = preload("res://Scenes/gameMessage.tscn");
 
@@ -18,8 +19,9 @@ func _process(delta) -> void:
 	_blur.modulate.a = 0.50 + sin(Time.get_ticks_msec() / 1000.0) * 0.50;
 	
 func addPlayer():
-	var _player = playerIconScene.instantiate()
-	playersNode.add_child(_player);
+	for i in range(len(Input.get_connected_joypads())):
+		var _player = playerIconScene.instantiate()
+		playersNode.add_child(_player);
 
 func pulsePlayer(playerInd) -> void:
 	var _playerIcon = playersNode.get_child(playerInd) as TextureRect;

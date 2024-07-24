@@ -1,6 +1,7 @@
-[gd_scene load_steps=10 format=3 uid="uid://bec7c2m22x5j1"]
+[gd_scene load_steps=11 format=3 uid="uid://bec7c2m22x5j1"]
 
 [ext_resource type="Script" path="res://Scripts/Level.gd" id="1_ircux"]
+[ext_resource type="PackedScene" uid="uid://bpksafv2ehle8" path="res://Scenes/transition_fade_out.tscn" id="3_62tsb"]
 [ext_resource type="Script" path="res://Scripts/ResultsMonsters.gd" id="3_k74a1"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g0ahp"]
@@ -88,7 +89,12 @@ shadow_enabled = true
 directional_shadow_mode = 0
 
 [node name="ResultsMonsters" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.727, -4.76837e-07, -0.732382)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.5, -0.5, -1)
 script = ExtResource("3_k74a1")
 
+[node name="TransitionFadeOut" parent="." instance=ExtResource("3_62tsb")]
+
+[node name="CountResultsTimer" type="Timer" parent="."]
+
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]
+[connection signal="timeout" from="CountResultsTimer" to="." method="_on_count_results_timer_timeout"]

@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://cbw65bbaerldm"
+path="res://.godot/imported/Coin Total Win 2.wav-b8c113a3b6c1affc106ec0ecf6fc2f3f.sample"
+
+[deps]
+
+source_file="res://Assets/Coin Total Win 2.wav"
+dest_files=["res://.godot/imported/Coin Total Win 2.wav-b8c113a3b6c1affc106ec0ecf6fc2f3f.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

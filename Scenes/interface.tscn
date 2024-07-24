@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://qq0fdpvsfjny"]
+[gd_scene load_steps=7 format=3 uid="uid://qq0fdpvsfjny"]
 
 [ext_resource type="Script" path="res://Scripts/Interface.gd" id="1_shi1r"]
 [ext_resource type="Texture2D" uid="uid://b722ba2hg23mv" path="res://icon.svg" id="2_4ix84"]
 [ext_resource type="Texture2D" uid="uid://co6nim4d6t6x6" path="res://Assets/binoculars.png" id="2_bl13r"]
 [ext_resource type="Shader" path="res://Shaders/blurEffect.gdshader" id="3_8wrbp"]
+[ext_resource type="Theme" uid="uid://dgpu2t7efufjm" path="res://Themes/specialText.tres" id="5_437e8"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_jmlp7"]
 shader = ExtResource("3_8wrbp")
@@ -53,6 +54,19 @@ anchor_bottom = 1.0
 offset_top = -96.0
 grow_horizontal = 2
 grow_vertical = 0
+
+[node name="ChickenCountLabel" type="Label" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 95.0
+offset_bottom = -373.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("5_437e8")
+text = "33"
+horizontal_alignment = 1
 
 [node name="MessageSpace" type="Control" parent="."]
 layout_mode = 3

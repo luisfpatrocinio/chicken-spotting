@@ -7,10 +7,13 @@ extends Node3D
 @onready var monsterTowerScene: PackedScene = preload("res://Scenes/monster_tower.tscn");
 @onready var monstersNode: Node3D = get_node("Monsters");
 @onready var resultsMonstersNode: Node3D = get_node("ResultsMonsters");
+@onready var countResultsTimer: Timer = get_node("CountResultsTimer");
+@onready var resultsCurve : Curve = preload("res://Curves/ChickenResultsCurve.tres");
+
 
 var createdChickens: int = 0;
 var playersInputs: Dictionary = {}
-var chickensToCreate: int = randi_range(25, 44);
+@export var chickensToCreate: int = randi_range(22, 45);
 
 var gameStarted: bool = false;
 var gameFinished: bool = false;
@@ -19,6 +22,10 @@ var showingResults: bool = false;
 var lastBehaviour: int = 0;
 
 var intervalFactor: float = 1.0;
+
+var countingVictory: bool = false;
+var victoryChickenCount: int = 0;
+
 
 func _ready() -> void:
 	Global.playBGM("game");
@@ -56,12 +63,14 @@ func _process(delta):
 		cameraNode.rotation.x = lerp(cameraNode.rotation.x, -0.50, 0.050)
 		cameraNode.rotation.y = 0.0
 		cameraNode.rotation.z = 0.0
+		if countResultsTimer.is_stopped(): countResultsTimer.start();
 
 func _input(event) -> void:
+	print(event.device);
 	if gameStarted and !gameFinished and event.is_action_pressed("ui_accept"):
 		playersInputs[event.device] = playersInputs.get(event.device, 0) + 1;
 		Interface.pulsePlayer(event.device);
-		Global.playSFX("count");
+		Global.playSFX("count", true);
 
 func spawnChicken(i = 0.0) -> void:
 	var _chicken: Node = chickenScene.instantiate();
@@ -134,3 +143,18 @@ func _on_spawn_timer_timeout() -> void:
 					
 	lastBehaviour = wrap(lastBehaviour + 1, 0, 3);
 	#intervalFactor -= 0.01;
+
+func animateResultChicken(no: int):
+	var _chicken = resultsMonstersNode.get_child(no) as CharacterBody3D;
+	var _anim = _chicken.get_node("AnimationPlayer") as AnimationPlayer;
+	_anim.play("Yes")
+
+func _on_count_results_timer_timeout():
+	if victoryChickenCount < resultsMonstersNode.get_child_count():
+		Interface.chickenCountLabel.visible = true;
+		animateResultChicken(victoryChickenCount);
+		victoryChickenCount += 1;				
+		var _xPos = victoryChickenCount / float(resultsMonstersNode.get_child_count());
+		countResultsTimer.wait_time = resultsCurve.sample(_xPos);
+		Interface.chickenCountLabel.text = str(victoryChickenCount);
+		
