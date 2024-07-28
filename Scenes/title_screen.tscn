@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=3 uid="uid://b5jel0kbkdgtb"]
+[gd_scene load_steps=43 format=3 uid="uid://b5jel0kbkdgtb"]
 
 [ext_resource type="Script" path="res://Scripts/TitleWall.gd" id="1_1a6f8"]
 [ext_resource type="Texture2D" uid="uid://cqymdxi6bd8pb" path="res://Assets/Chicken_Chicken_Texture.png" id="1_so2cf"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://cptyxbm8s36hs" path="res://Assets/Chicken-Spotting-22-07-2024.png" id="3_lflwi"]
 [ext_resource type="Texture2D" uid="uid://7uknbyccmk5s" path="res://Assets/Labiras_Logo.png" id="5_qr3yk"]
 [ext_resource type="Texture2D" uid="uid://cuxcy22p2jvur" path="res://Assets/Penguin_Penguin_Texture.png" id="5_y34nn"]
+[ext_resource type="PackedScene" uid="uid://bpksafv2ehle8" path="res://Scenes/transition_fade_out.tscn" id="8_hhiuh"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7lunq"]
 albedo_color = Color(0.807843, 1, 0.294118, 1)
@@ -2363,6 +2364,8 @@ autostart = true
 [node name="SwitchSetupTimer" type="Timer" parent="."]
 wait_time = 3.0
 autostart = true
+
+[node name="TransitionFadeOut" parent="." instance=ExtResource("8_hhiuh")]
 
 [connection signal="timeout" from="ShowPressStartTimer" to="." method="_on_show_press_start_timer_timeout"]
 [connection signal="timeout" from="SwitchSetupTimer" to="." method="_on_switch_setup_timer_timeout"]

@@ -3,6 +3,7 @@ extends Node
 @onready var bgmPlayer : AudioStreamPlayer = get_node("BGMPlayer");
 @export var transitionScene: PackedScene = preload("res://Scenes/transition_fade_in.tscn");
 var numberOfPlayers: int = 1;
+var levelRef: Level = null;
 
 var scenesDict: Dictionary = {
 	"title": preload("res://Scenes/title_screen.tscn"),

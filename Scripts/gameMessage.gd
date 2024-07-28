@@ -6,9 +6,9 @@ func _ready():
 
 
 func _process(delta):
-	position.y -= 1;
-	pass
-
+	position.y -= 0.10;
+	if $Timer.time_left < 0.50:
+		modulate.a = randf_range(0.20, 0.60);
 
 func _on_timer_timeout():
 	queue_free();

@@ -1,4 +1,5 @@
 extends Node3D
+class_name Level
 
 @onready var cameraNode: Node3D = get_node("CameraPivot");
 @onready var spawnTimer: Timer = get_node("SpawnTimer");
@@ -9,28 +10,27 @@ extends Node3D
 @onready var resultsMonstersNode: Node3D = get_node("ResultsMonsters");
 @onready var countResultsTimer: Timer = get_node("CountResultsTimer");
 @onready var resultsCurve : Curve = preload("res://Curves/ChickenResultsCurve.tres");
-
-
+@onready var victoryCanvas: PackedScene = preload("res://Scenes/victory_canvas.tscn");
+var startTimerCount : int = 3;
 var createdChickens: int = 0;
 var playersInputs: Dictionary = {}
 @export var chickensToCreate: int = randi_range(22, 45);
-
 var gameStarted: bool = false;
 var gameFinished: bool = false;
 var showingResults: bool = false;
-
 var lastBehaviour: int = 0;
-
 var intervalFactor: float = 1.0;
-
 var countingVictory: bool = false;
 var victoryChickenCount: int = 0;
+var showVictoryScreen: bool = false;
+var winners : Array[int] = [];
 
 
 func _ready() -> void:
 	Global.playBGM("game");
-	Interface.addPlayer(); #TODO: REMOVER DEPOIS
-	pass
+	Global.levelRef = self;
+	Interface.addPlayers(); #TODO: REMOVER DEPOIS
+	Interface.timeCountLabel.visible = true;
 	
 func startGame():
 	print("Jogo iniciado.");
@@ -47,26 +47,9 @@ func _process(delta):
 	
 	manageGameOver();
 	
-	if showingResults:
-		if resultsMonstersNode.get_child_count() <= 0:
-			var _n = 0;
-			for i in range(createdChickens):
-				var _chicken = chickenScene.instantiate();
-				resultsMonstersNode.add_child(_chicken);
-				var _w = 10;
-				var _spac = 0.850;
-				_chicken.position.x = (_n % _w) * _spac;
-				_chicken.position.z = floor(_n / _w) * _spac;
-				_chicken.set_process(false);
-				_n += 1;
-		cameraNode.global_position = cameraNode.global_position.lerp(Vector3(15.0, 4.0, 6.50), 0.050);
-		cameraNode.rotation.x = lerp(cameraNode.rotation.x, -0.50, 0.050)
-		cameraNode.rotation.y = 0.0
-		cameraNode.rotation.z = 0.0
-		if countResultsTimer.is_stopped(): countResultsTimer.start();
+	manageResults();
 
 func _input(event) -> void:
-	print(event.device);
 	if gameStarted and !gameFinished and event.is_action_pressed("ui_accept"):
 		playersInputs[event.device] = playersInputs.get(event.device, 0) + 1;
 		Interface.pulsePlayer(event.device);
@@ -117,7 +100,7 @@ func manageGameOver():
 			gameFinished = true;
 			Interface.showMessage("ACABOU!");
 			
-	if showingResults:
+	if showingResults and !showVictoryScreen:
 		for i in range(Interface.playersNode.get_child_count()):
 			var icon = Interface.playersNode.get_child(i);
 			icon.get_node("Label").visible = true;
@@ -126,7 +109,7 @@ func manageGameOver():
 	
 func _on_spawn_timer_timeout() -> void:
 	spawnTimer.wait_time = randf_range(1.0, 2.0) * intervalFactor;	
-	if lastBehaviour == 1 and randi() % 2 == 0:
+	if lastBehaviour == 0 and randi() % 2 == 0:
 		spawnMonsterTower();
 	else:
 		var _qnt = 1;
@@ -157,4 +140,58 @@ func _on_count_results_timer_timeout():
 		var _xPos = victoryChickenCount / float(resultsMonstersNode.get_child_count());
 		countResultsTimer.wait_time = resultsCurve.sample(_xPos);
 		Interface.chickenCountLabel.text = str(victoryChickenCount);
+	else:
+		# Instante em que para de contar os pintos.
 		
+		# Registra vencedor
+		winners = [];
+		for player in playersInputs:
+			var _thisPlayerScore = playersInputs[player]
+			if createdChickens == _thisPlayerScore:
+				winners.append(player);
+		
+		# Cria tela de vitória.
+		var _vic = victoryCanvas.instantiate()
+		Interface.add_child(_vic);
+		
+		# Interrompe o tempo	
+		countResultsTimer.stop();
+		
+		# Marca como verdadeiro essa variável de controle.
+		showVictoryScreen = true;
+		
+
+
+func _onStartTimerTimeout():
+	if startTimerCount <= 0:
+		$StartTimer.stop();	
+		Interface.timeCountLabel.visible = false;
+		return
+	startTimerCount -= 1;
+	Interface.timeCountLabel.text = str(startTimerCount) if startTimerCount > 0 else "START!";
+	if startTimerCount <= 0:
+		startGame();
+
+func manageResults():
+	if showingResults:
+		if resultsMonstersNode.get_child_count() <= 0:
+			var _n = 0;
+			for i in range(createdChickens):
+				var _chicken = chickenScene.instantiate();
+				resultsMonstersNode.add_child(_chicken);
+				var _w = 10;
+				var _spac = 0.850;
+				_chicken.position.x = (_n % _w) * _spac;
+				_chicken.position.z = floor(_n / _w) * _spac;
+				_chicken.set_process(false);
+				_n += 1;
+		cameraNode.global_position = cameraNode.global_position.lerp(Vector3(15.0, 4.0, 6.50), 0.050);
+		cameraNode.rotation.x = lerp(cameraNode.rotation.x, -0.50, 0.050)
+		cameraNode.rotation.y = 0.0
+		cameraNode.rotation.z = 0.0
+		if countResultsTimer.is_stopped() and !showVictoryScreen: 
+			countResultsTimer.start();
+	
+	if showVictoryScreen:
+		if Input.is_action_just_pressed("ui_accept"):
+			Global.transitionToScene("title");

@@ -1,0 +1,41 @@
+[gd_scene load_steps=4 format=3 uid="uid://n84tda3t2kec"]
+
+[ext_resource type="Script" path="res://Scripts/victory_canvas.gd" id="1_c2m1e"]
+[ext_resource type="Theme" uid="uid://dgpu2t7efufjm" path="res://Themes/specialText.tres" id="1_gevvl"]
+[ext_resource type="Theme" uid="uid://ph2g2b32bi6u" path="res://Themes/mainTheme.tres" id="2_qincg"]
+
+[node name="VictoryCanvas" type="CanvasLayer"]
+script = ExtResource("1_c2m1e")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.470588)
+
+[node name="Label" type="Label" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_gevvl")
+text = "Jogador N venceu!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="."]
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = 105.0
+offset_bottom = 147.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_qincg")
+text = "Press START to reset."
+horizontal_alignment = 1
+vertical_alignment = 2

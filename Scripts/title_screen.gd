@@ -11,6 +11,7 @@ var askingPlayers = false;
 
 func _ready():
 	Global.playBGM("title");
+	Interface.resetInterface();
 	
 func _input(event):		
 	if event.is_action_pressed("ui_accept"):

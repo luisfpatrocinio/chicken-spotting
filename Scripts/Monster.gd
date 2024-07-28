@@ -58,11 +58,11 @@ func initialize():
 					speed = 1.0 + randf_range(0.0, 0.50);
 					position.z = 0.0;
 					startDanceTimer.start(3.50);
-			initialized = true;
+	initialized = true;
 
 func manageAnimation() -> void:
 	if beingCarried:
-		myAnim.stop();
+		if !myAnim.is_playing(): myAnim.play("Yes");
 		return;
 		
 	if dancing:

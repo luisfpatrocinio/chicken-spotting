@@ -96,5 +96,9 @@ script = ExtResource("3_k74a1")
 
 [node name="CountResultsTimer" type="Timer" parent="."]
 
+[node name="StartTimer" type="Timer" parent="."]
+autostart = true
+
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]
 [connection signal="timeout" from="CountResultsTimer" to="." method="_on_count_results_timer_timeout"]
+[connection signal="timeout" from="StartTimer" to="." method="_onStartTimerTimeout"]
