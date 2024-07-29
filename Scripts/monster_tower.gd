@@ -2,8 +2,8 @@ extends CharacterBody3D
 class_name MonsterTower
 
 @export var monsterArray = [];
-@export var towerSize : int = 4;
-@export var chickenQnt : int = 2;
+@export var towerSize : int = 0;
+@export var chickenQnt : int = 0;
 var chickens: int = 0;
 @export var chickenScene: PackedScene = preload("res://Scenes/Monsters/Chicken.tscn");
 @export var penguinScene: PackedScene = preload("res://Scenes/Monsters/Penguin.tscn");

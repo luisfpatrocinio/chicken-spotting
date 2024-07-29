@@ -62,6 +62,7 @@ func spawnChicken(i = 0.0) -> void:
 	_chicken.behaviour = lastBehaviour;
 	monstersNode.add_child(_chicken);
 	createdChickens += 1;
+	print("Adicionado: %s. Total: %s" % [1, createdChickens]);
 	
 func spawnPenguin(i = 0.0) -> void:
 	var _penguin: Node = penguinScene.instantiate();
@@ -78,10 +79,12 @@ func spawnMonsterTower() -> void:
 	_tower.towerSize = randi_range(3, 7);
 	
 	var _chickenInThisTower = randi_range(2, 5);
+	_chickenInThisTower = min(_chickenInThisTower, _tower.towerSize);
 	_tower.chickenQnt = _chickenInThisTower;
 	
 	monstersNode.add_child(_tower);
 	createdChickens += _chickenInThisTower;
+	print("TORRE: Adicionado: %s. Total: %s" % [_chickenInThisTower, createdChickens]);
 
 func manageGameOver():
 	if gameFinished and !showingResults:
@@ -98,7 +101,7 @@ func manageGameOver():
 	elif !showingResults:
 		if createdChickens >= chickensToCreate and monstersNode.get_child_count() <= 0:
 			gameFinished = true;
-			Interface.showMessage("ACABOU!");
+			Interface.showMessage("FINISH!");
 			
 	if showingResults and !showVictoryScreen:
 		for i in range(Interface.playersNode.get_child_count()):
