@@ -15,6 +15,7 @@ var startTimerCount : int = 3;
 var createdChickens: int = 0;
 var playersInputs: Dictionary = {}
 @export var chickensToCreate: int = randi_range(22, 45);
+#@export var chickensToCreate: int = 5;
 var gameStarted: bool = false;
 var gameFinished: bool = false;
 var showingResults: bool = false;
@@ -23,7 +24,7 @@ var intervalFactor: float = 1.0;
 var countingVictory: bool = false;
 var victoryChickenCount: int = 0;
 var showVictoryScreen: bool = false;
-var winners : Array[int] = [];
+var winners : Array[String] = [];
 
 
 func _ready() -> void:
@@ -31,6 +32,7 @@ func _ready() -> void:
 	Global.levelRef = self;
 	Interface.addPlayers(); #TODO: REMOVER DEPOIS
 	Interface.timeCountLabel.visible = true;
+	Connection.startGame();
 	
 func startGame():
 	print("Jogo iniciado.");
@@ -50,10 +52,12 @@ func _process(delta):
 	manageResults();
 
 func _input(event) -> void:
+	# Se o jogo estiver rolando, e o botão for pressionado:
 	if gameStarted and !gameFinished and event.is_action_pressed("ui_accept"):
-		playersInputs[event.device] = playersInputs.get(event.device, 0) + 1;
-		Interface.pulsePlayer(event.device);
-		Global.playSFX("count", true);
+		if event.device < len(Global.players):
+			Global.players[event.device]["count"] = Global.players[event.device]["count"] + 1;
+			Interface.pulsePlayer(event.device);
+		
 
 func spawnChicken(i = 0.0) -> void:
 	var _chicken: Node = chickenScene.instantiate();
@@ -87,6 +91,7 @@ func spawnMonsterTower() -> void:
 	print("TORRE: Adicionado: %s. Total: %s" % [_chickenInThisTower, createdChickens]);
 
 func manageGameOver():
+	# Jogo acabou, mas não estamos mostrando os resultados ainda.
 	if gameFinished and !showingResults:
 		var _lens = Interface.get_node("Binoculars") as Sprite2D
 		_lens.modulate.a = move_toward(_lens.modulate.a, 0.0, 0.015);
@@ -96,18 +101,21 @@ func manageGameOver():
 		_tween.tween_property(cameraNode, "global_position", Vector3(0.0, 0.65, 6.50), 1.0)
 		await _tween.finished;
 		
-		await get_tree().create_timer(3);
-		showingResults = true;
+		if $ShowResultsTimer.is_stopped():
+			$ShowResultsTimer.start();			
+	
+	# Aguardar condição para o jogo acabar.
 	elif !showingResults:
 		if createdChickens >= chickensToCreate and monstersNode.get_child_count() <= 0:
 			gameFinished = true;
+			Connection.enableGuessing();			
 			Interface.showMessage("FINISH!");
 			
 	if showingResults and !showVictoryScreen:
 		for i in range(Interface.playersNode.get_child_count()):
 			var icon = Interface.playersNode.get_child(i);
 			icon.get_node("Label").visible = true;
-			icon.get_node("Label").text = str(playersInputs.get(i));
+			icon.get_node("Label").text = str(Global.players[i]["count"]);
 			
 	
 func _on_spawn_timer_timeout() -> void:
@@ -116,7 +124,7 @@ func _on_spawn_timer_timeout() -> void:
 		spawnMonsterTower();
 	else:
 		var _qnt = 1;
-		if randi() % 3 == 0 and lastBehaviour == 0:
+		if randi() % 3 == 0 and lastBehaviour in [0, 1]:
 			print("CRIANDO VARIOS PINTOS EM SEQUENCIA");
 			_qnt = randi_range(3, 5);
 			spawnTimer.wait_time += _qnt * 0.150;
@@ -147,12 +155,15 @@ func _on_count_results_timer_timeout():
 		# Instante em que para de contar os pintos.
 		
 		# Registra vencedor
-		winners = [];
-		for player in playersInputs:
-			var _thisPlayerScore = playersInputs[player]
+		for player in Global.players:
+			print("Checando se o jogador " + player["name"] + " venceu:")
+			var _thisPlayerScore = player["count"]
 			if createdChickens == _thisPlayerScore:
-				winners.append(player);
-		
+				winners.append(player["name"]);
+				print("VENCEU")
+			else:
+				print("NAO VENCEU")
+				
 		# Cria tela de vitória.
 		var _vic = victoryCanvas.instantiate()
 		Interface.add_child(_vic);
@@ -198,3 +209,7 @@ func manageResults():
 	if showVictoryScreen:
 		if Input.is_action_just_pressed("ui_accept"):
 			Global.transitionToScene("title");
+
+
+func _on_show_results_timer_timeout():
+	showingResults = true;	

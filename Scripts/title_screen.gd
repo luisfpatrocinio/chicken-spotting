@@ -8,10 +8,15 @@ var flashValue: float = 1.0;
 var currentDisplay: int = 0;
 var pressedStart = false;
 var askingPlayers = false;
+var gameStarted: bool = false;
+#var connecting: bool = false;
 
 func _ready():
 	Global.playBGM("title");
+	Global.players.clear();
 	Interface.resetInterface();
+	
+	showAskingPlayer();
 	
 func _input(event):		
 	if event.is_action_pressed("ui_accept"):
@@ -20,17 +25,18 @@ func _input(event):
 			$ShowPressStartTimer.wait_time = 0.10
 			Global.playSFX("start");
 			await get_tree().create_timer(1).timeout;
-			askingPlayers = true;
-			pressStartLabel.visible = false;		
-			$ShowPressStartTimer.stop();
+			showAskingPlayer();
 		elif askingPlayers:
 			Global.playSFX("start");			
 			Global.transitionToScene("game");
 	
 	if askingPlayers:
-		Global.numberOfPlayers = max(1, len(Input.get_connected_joypads()));
+		pass
+		#Global.numberOfPlayers = max(1, len(Input.get_connected_joypads()));
+		
 		
 func _process(delta):
+	# Reduce flash effect
 	var _sp = flashValue / 10.0;
 	flashValue = move_toward(flashValue, 0.0, _sp)
 	$CanvasLayer/Flash.modulate.a = flashValue;
@@ -45,6 +51,11 @@ func _process(delta):
 	
 	manageAskingPlayers();
 
+func showAskingPlayer():
+	askingPlayers = true;
+	pressStartLabel.visible = false;		
+	$ShowPressStartTimer.stop();
+
 func manageAskingPlayers():
 	if !askingPlayers:
 		return;
@@ -54,14 +65,39 @@ func manageAskingPlayers():
 	var _label = connectPlayersNode.get_node("PlayersNumberLabel") as Label;	
 	var _instructionLabel = connectPlayersNode.get_node("EnterToContinueLabel") as Label;
 	var _joypadNumber = len(Input.get_connected_joypads())
-	if _joypadNumber > 0:	
-		_label.text = str(Global.numberOfPlayers) + (" players" if Global.numberOfPlayers > 1 else " player");
+	var _playerNumber = len(Global.players);
+	if _playerNumber > 0:	
+		_label.text = str(_playerNumber) + (" players" if _playerNumber > 1 else " player");
 	else:
-		_label.text = "Single Player Mode";
+		_label.text = "";
 	
 	var _enterStr = "START" if _joypadNumber >= 1 else "ENTER";
-	_instructionLabel.text = "Press " + _enterStr + " to continue.";
+
+	#_instructionLabel.text = "Press " + _enterStr + " to continue.";
 	
+	var _timer = get_node("StartGameTimer") as Timer;
+	if _timer.is_stopped() and len(Global.players) >= 3:
+		_timer.start();
+	
+	# Exibir tempo para iniciar partida.
+	if !_timer.is_stopped():
+		_instructionLabel.text = "Starting in %s seconds." % floor(_timer.time_left);
+	else:
+		var _questionLabel = get_node("CanvasLayer/ConnectPlayers/QuestionLabel") as Label;
+		_questionLabel.visible = Connection.connected;
+		$CanvasLayer/ConnectPlayers/QRCODE.visible = Connection.connected;
+		if Connection.connected:
+			_instructionLabel.size.x = 400;
+			_instructionLabel.position = Vector2(500 - 150, 360);		
+			_instructionLabel.text = "Waiting for players";
+		else:
+			# Centralizar texto.
+			_instructionLabel.size.x = 800;
+			_instructionLabel.position = Vector2(0, 280);
+			_instructionLabel.text = "Connecting" + str(".").repeat(int(Time.get_ticks_msec()/500) % 4);
+		
+	if gameStarted:
+		_instructionLabel.text = "";
 
 func _on_show_press_start_timer_timeout():
 	pressStartLabel.visible = !pressStartLabel.visible;
@@ -73,3 +109,8 @@ func _on_switch_setup_timer_timeout():
 	currentDisplay += 1;
 	currentDisplay = wrap(currentDisplay, 0, displays.get_child_count());
 	switchSetupTimer.wait_time = randf_range(4.0, 6.0);
+
+
+func _on_start_game_timer_timeout():
+	Global.transitionToScene("game");
+	gameStarted = true;

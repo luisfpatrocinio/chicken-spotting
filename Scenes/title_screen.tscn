@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://b5jel0kbkdgtb"]
+[gd_scene load_steps=44 format=3 uid="uid://b5jel0kbkdgtb"]
 
 [ext_resource type="Script" path="res://Scripts/TitleWall.gd" id="1_1a6f8"]
 [ext_resource type="Texture2D" uid="uid://cqymdxi6bd8pb" path="res://Assets/Chicken_Chicken_Texture.png" id="1_so2cf"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://cptyxbm8s36hs" path="res://Assets/Chicken-Spotting-22-07-2024.png" id="3_lflwi"]
 [ext_resource type="Texture2D" uid="uid://7uknbyccmk5s" path="res://Assets/Labiras_Logo.png" id="5_qr3yk"]
 [ext_resource type="Texture2D" uid="uid://cuxcy22p2jvur" path="res://Assets/Penguin_Penguin_Texture.png" id="5_y34nn"]
+[ext_resource type="Texture2D" uid="uid://b2rewtcy1t8rh" path="res://Assets/QRCODE.png" id="6_8y7g6"]
 [ext_resource type="PackedScene" uid="uid://bpksafv2ehle8" path="res://Scenes/transition_fade_out.tscn" id="8_hhiuh"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7lunq"]
@@ -1703,29 +1704,6 @@ position = Vector2(400, 120)
 scale = Vector2(0.75, 0.75)
 texture = ExtResource("3_lflwi")
 
-[node name="LabirasLogo" type="Sprite2D" parent="CanvasLayer"]
-position = Vector2(728, 32)
-scale = Vector2(0.35, 0.35)
-texture = ExtResource("5_qr3yk")
-
-[node name="CreditsLabel" type="Label" parent="CanvasLayer"]
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -274.0
-offset_top = -61.0
-offset_right = 274.0
-offset_bottom = -12.0
-grow_horizontal = 2
-grow_vertical = 0
-size_flags_horizontal = 4
-size_flags_vertical = 8
-theme = ExtResource("3_6fxyg")
-text = "A game made by Luis F. Patrocinio"
-horizontal_alignment = 1
-
 [node name="PressStartLabel" type="Label" parent="CanvasLayer"]
 anchors_preset = 8
 anchor_left = 0.5
@@ -1742,8 +1720,68 @@ size_flags_horizontal = 4
 theme = ExtResource("3_6fxyg")
 text = "PRESS START"
 
-[node name="ConnectPlayers" type="Control" parent="CanvasLayer"]
+[node name="ConnectPlayersOld" type="Control" parent="CanvasLayer"]
 visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/ConnectPlayersOld"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0901961, 0.0901961, 0.0901961, 0.705882)
+
+[node name="QuestionLabel" type="Label" parent="CanvasLayer/ConnectPlayersOld"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -21.0
+offset_bottom = 21.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_6fxyg")
+text = "Connect the gamepads:"
+horizontal_alignment = 1
+
+[node name="PlayersNumberLabel" type="Label" parent="CanvasLayer/ConnectPlayersOld"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = 40.0
+offset_bottom = 82.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_6fxyg")
+text = "50
+"
+horizontal_alignment = 1
+
+[node name="EnterToContinueLabel" type="Label" parent="CanvasLayer/ConnectPlayersOld"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = 120.0
+offset_bottom = 162.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_6fxyg")
+text = "Press ENTER to Continue"
+horizontal_alignment = 1
+
+[node name="ConnectPlayers" type="Control" parent="CanvasLayer"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -1761,29 +1799,39 @@ grow_vertical = 2
 color = Color(0.0901961, 0.0901961, 0.0901961, 0.705882)
 
 [node name="QuestionLabel" type="Label" parent="CanvasLayer/ConnectPlayers"]
+custom_minimum_size = Vector2(480, 0)
 layout_mode = 1
-anchors_preset = 14
+anchors_preset = 8
+anchor_left = 0.5
 anchor_top = 0.5
-anchor_right = 1.0
+anchor_right = 0.5
 anchor_bottom = 0.5
-offset_top = -21.0
-offset_bottom = 21.0
+offset_left = -83.0
+offset_top = -81.0
+offset_right = 397.0
+offset_bottom = -39.0
 grow_horizontal = 2
 grow_vertical = 2
+pivot_offset = Vector2(240, 0)
 theme = ExtResource("3_6fxyg")
-text = "Connect the gamepads:"
+text = "Connect using the QR Code."
 horizontal_alignment = 1
 
 [node name="PlayersNumberLabel" type="Label" parent="CanvasLayer/ConnectPlayers"]
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 1
-anchors_preset = 14
+anchors_preset = 8
+anchor_left = 0.5
 anchor_top = 0.5
-anchor_right = 1.0
+anchor_right = 0.5
 anchor_bottom = 0.5
-offset_top = 40.0
-offset_bottom = 82.0
+offset_left = 120.0
+offset_top = -25.0
+offset_right = 170.0
+offset_bottom = 25.0
 grow_horizontal = 2
 grow_vertical = 2
+pivot_offset = Vector2(25, 25)
 theme = ExtResource("3_6fxyg")
 text = "50
 "
@@ -1791,16 +1839,48 @@ horizontal_alignment = 1
 
 [node name="EnterToContinueLabel" type="Label" parent="CanvasLayer/ConnectPlayers"]
 layout_mode = 1
-anchors_preset = 14
+anchors_preset = 8
+anchor_left = 0.5
 anchor_top = 0.5
-anchor_right = 1.0
+anchor_right = 0.5
 anchor_bottom = 0.5
-offset_top = 120.0
-offset_bottom = 162.0
+offset_left = -75.0
+offset_top = 60.0
+offset_right = 725.0
+offset_bottom = 102.0
 grow_horizontal = 2
 grow_vertical = 2
+pivot_offset = Vector2(400, 0)
 theme = ExtResource("3_6fxyg")
 text = "Press ENTER to Continue"
+horizontal_alignment = 1
+
+[node name="QRCODE" type="Sprite2D" parent="CanvasLayer/ConnectPlayers"]
+position = Vector2(168, 330)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("6_8y7g6")
+
+[node name="LabirasLogo" type="Sprite2D" parent="CanvasLayer"]
+position = Vector2(400, 32)
+scale = Vector2(0.35, 0.35)
+texture = ExtResource("5_qr3yk")
+
+[node name="CreditsLabel" type="Label" parent="CanvasLayer"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -287.5
+offset_top = -61.0
+offset_right = 287.5
+offset_bottom = -12.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 4
+size_flags_vertical = 8
+theme = ExtResource("3_6fxyg")
+text = "A game made by Luis F. Patrocinio"
 horizontal_alignment = 1
 
 [node name="Monsters" type="Node3D" parent="."]
@@ -2366,6 +2446,12 @@ wait_time = 3.0
 autostart = true
 
 [node name="TransitionFadeOut" parent="." instance=ExtResource("8_hhiuh")]
+visible = false
+
+[node name="StartGameTimer" type="Timer" parent="."]
+wait_time = 15.0
+one_shot = true
 
 [connection signal="timeout" from="ShowPressStartTimer" to="." method="_on_show_press_start_timer_timeout"]
 [connection signal="timeout" from="SwitchSetupTimer" to="." method="_on_switch_setup_timer_timeout"]
+[connection signal="timeout" from="StartGameTimer" to="." method="_on_start_game_timer_timeout"]

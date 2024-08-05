@@ -20,17 +20,25 @@ func _process(delta) -> void:
 	#_blur.material.set("shader_parameter/LOD", 1.0 + sin(Time.get_ticks_msec() / 1000.0));
 	_blur.modulate.a = 0.50 + sin(Time.get_ticks_msec() / 1000.0) * 0.50;
 	
+	
+	
 func addPlayers():
-	for i in range(max(1, len(Input.get_connected_joypads()))):
+	var _playerNumber = Connection.connectedPlayersNumber;
+	print("Iniciando um jogo com %s jogadores." % _playerNumber);
+	#for i in range(max(1, len(Input.get_connected_joypads()))):
+	for player in Global.players:
 		var _player = playerIconScene.instantiate()
+		var _label = _player.get_node("PlayerName") as Label;
+		_label.text = player["name"];
 		playersNode.add_child(_player);
-		Global.levelRef.playersInputs[i] = 0;
+		player["count"] = 0;
 		#TODO: Conferir se todos os inputs obedecem essa ordem.
 
 func pulsePlayer(playerInd) -> void:
 	var _playerIcon = playersNode.get_child(playerInd) as TextureRect;
 	if _playerIcon != null:
 		_playerIcon.scale = Vector2(1.10, 1.10);
+		Global.playSFX("count", true);
 
 func showMessage(message: String) -> void:
 	var _msg = messageScene.instantiate();

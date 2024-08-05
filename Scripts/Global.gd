@@ -5,6 +5,8 @@ extends Node
 var numberOfPlayers: int = 1;
 var levelRef: Level = null;
 
+var players : Array[Dictionary] = [];
+
 var scenesDict: Dictionary = {
 	"title": preload("res://Scenes/title_screen.tscn"),
 	"game": preload("res://Scenes/level.tscn")
