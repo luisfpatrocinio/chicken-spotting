@@ -1,7 +1,8 @@
 extends Node3D
 
 @onready var switchSetupTimer: Timer = get_node("SwitchSetupTimer");
-@onready var pressStartLabel = get_node("CanvasLayer/PressStartLabel");
+@onready var pressStartLabel: Label = get_node("CanvasLayer/PressStartLabel");
+@onready var connectingLabel: Label = get_node("CanvasLayer/ConnectingLabel");
 @onready var displays = get_node("Monsters");
 @onready var connectPlayersNode = get_node("CanvasLayer/ConnectPlayers");
 var flashValue: float = 1.0;
@@ -15,8 +16,7 @@ func _ready():
 	Global.playBGM("title");
 	Global.players.clear();
 	Interface.resetInterface();
-	
-	showAskingPlayer();
+	#showAskingPlayer();
 	
 func _input(event):		
 	if event.is_action_pressed("ui_accept"):
@@ -36,6 +36,13 @@ func _input(event):
 		
 		
 func _process(delta):
+	# Avançar ao conectar
+	if Connection.connected and !askingPlayers:
+		showAskingPlayer();
+	elif !Connection.connected:
+		connectingLabel.visible = true;
+		connectingLabel.text = "Conectando" + str(".").repeat(int(Time.get_ticks_msec()/500) % 4);
+	
 	# Reduce flash effect
 	var _sp = flashValue / 10.0;
 	flashValue = move_toward(flashValue, 0.0, _sp)
@@ -53,7 +60,8 @@ func _process(delta):
 
 func showAskingPlayer():
 	askingPlayers = true;
-	pressStartLabel.visible = false;		
+	pressStartLabel.visible = false;
+	connectingLabel.visible = false;
 	$ShowPressStartTimer.stop();
 
 func manageAskingPlayers():
@@ -81,7 +89,7 @@ func manageAskingPlayers():
 	
 	# Exibir tempo para iniciar partida.
 	if !_timer.is_stopped():
-		_instructionLabel.text = "Starting in %s seconds." % floor(_timer.time_left);
+		_instructionLabel.text = "Começando em %s segundos." % floor(_timer.time_left);
 	else:
 		var _questionLabel = get_node("CanvasLayer/ConnectPlayers/QuestionLabel") as Label;
 		_questionLabel.visible = Connection.connected;
@@ -89,9 +97,9 @@ func manageAskingPlayers():
 		if Connection.connected:
 			_instructionLabel.size.x = 400;
 			_instructionLabel.position = Vector2(500 - 150, 360);		
-			_instructionLabel.text = "Waiting for players";
+			_instructionLabel.text = "Aguardando jogadores" + str(".").repeat(int(Time.get_ticks_msec()/500) % 4);
 		else:
-			# Centralizar texto.
+			# Centralizar texto. #TODO: Isso não está mais sendo usado.
 			_instructionLabel.size.x = 800;
 			_instructionLabel.position = Vector2(0, 280);
 			_instructionLabel.text = "Connecting" + str(".").repeat(int(Time.get_ticks_msec()/500) % 4);

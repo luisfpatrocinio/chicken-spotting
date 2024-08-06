@@ -41,7 +41,6 @@ func _process(delta):
 		set_process(false) # Stop processing.
 		
 	elif state == WebSocketPeer.STATE_CONNECTING:
-		print("Conectando... ")
 		pass
 		
 
@@ -92,6 +91,13 @@ func endGame(result: String):
 	}
 	socket.send_text(JSON.stringify(_packet))
 
+func disableGuessing():
+	print("Desativando adivinhação.");
+	var _packet = {
+		"type": "disableGuessing"
+	}
+	socket.send_text(JSON.stringify(_packet));
+# TODO: Função para impedir o envio de palpites.
 
 func _on_timer_timeout():
 	if !connected:

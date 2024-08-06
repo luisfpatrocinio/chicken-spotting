@@ -1,0 +1,59 @@
+# LANGUAGE translation for One Button for the following files:
+# res://Scenes/interface.tscn
+# res://Scenes/level.tscn
+# res://Scenes/title_screen.tscn
+# res://Scenes/victory_canvas.tscn
+#
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: One Button\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8-bit\n"
+
+#: Scenes/interface.tscn
+msgid "3"
+msgstr ""
+
+#: Scenes/interface.tscn
+msgid "33"
+msgstr ""
+
+#: Scenes/title_screen.tscn
+msgid "PRESS START"
+msgstr ""
+
+#: Scenes/title_screen.tscn
+msgid "CONNECTING"
+msgstr ""
+
+#: Scenes/title_screen.tscn
+msgid "Connect the gamepads:"
+msgstr ""
+
+#: Scenes/title_screen.tscn
+msgid "50\n"
+msgstr ""
+
+#: Scenes/title_screen.tscn
+msgid "Press ENTER to Continue"
+msgstr ""
+
+#: Scenes/title_screen.tscn
+msgid "Connect using the QR Code."
+msgstr ""
+
+#: Scenes/title_screen.tscn
+msgid "A game made by Luis F. Patrocinio"
+msgstr ""
+
+#: Scenes/victory_canvas.tscn
+msgid "Jogadores ss ssa das dsa s sad sa dsa dsa dsa dsa d dsadsa  ddsa"
+msgstr ""
+
+#: Scenes/victory_canvas.tscn
+msgid "Press START to reset."
+msgstr ""

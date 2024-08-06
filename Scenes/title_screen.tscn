@@ -1705,6 +1705,7 @@ scale = Vector2(0.75, 0.75)
 texture = ExtResource("3_lflwi")
 
 [node name="PressStartLabel" type="Label" parent="CanvasLayer"]
+visible = false
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -1719,6 +1720,22 @@ grow_vertical = 2
 size_flags_horizontal = 4
 theme = ExtResource("3_6fxyg")
 text = "PRESS START"
+
+[node name="ConnectingLabel" type="Label" parent="CanvasLayer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -116.5
+offset_top = 173.0
+offset_right = 116.5
+offset_bottom = 215.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+theme = ExtResource("3_6fxyg")
+text = "CONNECTING"
 
 [node name="ConnectPlayersOld" type="Control" parent="CanvasLayer"]
 visible = false
@@ -1782,6 +1799,7 @@ text = "Press ENTER to Continue"
 horizontal_alignment = 1
 
 [node name="ConnectPlayers" type="Control" parent="CanvasLayer"]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -1814,7 +1832,7 @@ grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(240, 0)
 theme = ExtResource("3_6fxyg")
-text = "Connect using the QR Code."
+text = "Conecte pelo QR Code."
 horizontal_alignment = 1
 
 [node name="PlayersNumberLabel" type="Label" parent="CanvasLayer/ConnectPlayers"]
@@ -1880,7 +1898,7 @@ grow_vertical = 0
 size_flags_horizontal = 4
 size_flags_vertical = 8
 theme = ExtResource("3_6fxyg")
-text = "A game made by Luis F. Patrocinio"
+text = "Feito por Luis F. Patrocinio"
 horizontal_alignment = 1
 
 [node name="Monsters" type="Node3D" parent="."]
@@ -2439,7 +2457,6 @@ autoplay = "Dance"
 
 [node name="ShowPressStartTimer" type="Timer" parent="."]
 wait_time = 0.4
-autostart = true
 
 [node name="SwitchSetupTimer" type="Timer" parent="."]
 wait_time = 3.0

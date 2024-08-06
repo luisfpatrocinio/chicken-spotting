@@ -31,6 +31,7 @@ func _ready() -> void:
 	Global.playBGM("game");
 	Global.levelRef = self;
 	Interface.addPlayers(); #TODO: REMOVER DEPOIS
+	Interface.timeCountLabel.text = "3";	# Começar a contagem a partir do 3.
 	Interface.timeCountLabel.visible = true;
 	Connection.startGame();
 	
@@ -147,6 +148,7 @@ func _on_count_results_timer_timeout():
 	if victoryChickenCount < resultsMonstersNode.get_child_count():
 		Interface.chickenCountLabel.visible = true;
 		animateResultChicken(victoryChickenCount);
+		Global.playSFX("count");
 		victoryChickenCount += 1;				
 		var _xPos = victoryChickenCount / float(resultsMonstersNode.get_child_count());
 		countResultsTimer.wait_time = resultsCurve.sample(_xPos);
@@ -182,7 +184,7 @@ func _onStartTimerTimeout():
 		Interface.timeCountLabel.visible = false;
 		return
 	startTimerCount -= 1;
-	Interface.timeCountLabel.text = str(startTimerCount) if startTimerCount > 0 else "START!";
+	Interface.timeCountLabel.text = str(startTimerCount) if startTimerCount > 0 else "VALENDO!";
 	if startTimerCount <= 0:
 		startGame();
 
@@ -199,6 +201,7 @@ func manageResults():
 				_chicken.position.z = floor(_n / _w) * _spac;
 				_chicken.set_process(false);
 				_n += 1;
+			Connection.disableGuessing();
 		cameraNode.global_position = cameraNode.global_position.lerp(Vector3(15.0, 4.0, 6.50), 0.050);
 		cameraNode.rotation.x = lerp(cameraNode.rotation.x, -0.50, 0.050)
 		cameraNode.rotation.y = 0.0
