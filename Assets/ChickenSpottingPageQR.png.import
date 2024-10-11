@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b2rewtcy1t8rh"
-path="res://.godot/imported/QRCODE.png-ed8129d66ca850690aae087771f19c97.ctex"
+uid="uid://jlviomfiqerb"
+path="res://.godot/imported/ChickenSpottingPageQR.png-63a51602accd3bef48231d0b795aba18.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/QRCODE.png"
-dest_files=["res://.godot/imported/QRCODE.png-ed8129d66ca850690aae087771f19c97.ctex"]
+source_file="res://Assets/ChickenSpottingPageQR.png"
+dest_files=["res://.godot/imported/ChickenSpottingPageQR.png-63a51602accd3bef48231d0b795aba18.ctex"]
 
 [params]
 
